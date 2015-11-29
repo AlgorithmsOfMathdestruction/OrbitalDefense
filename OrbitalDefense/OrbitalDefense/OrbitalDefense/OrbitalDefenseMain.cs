@@ -20,6 +20,9 @@ namespace OrbitalDefense
         SpriteBatch spriteBatch;
 
         DrawableGameComponent bg;
+        DrawableGameComponent fps;
+        DrawableGameComponent planet;
+        DrawableGameComponent planetHud;
 
         public OrbitalDefenseMain()
         {
@@ -39,6 +42,11 @@ namespace OrbitalDefense
 
             base.Initialize();
 
+            graphics.PreferredBackBufferWidth = 1920;
+            graphics.PreferredBackBufferHeight = 1080;
+            graphics.IsFullScreen = true;
+            graphics.ApplyChanges();
+
             new Background(this as Game);
         }
 
@@ -53,6 +61,12 @@ namespace OrbitalDefense
             // TODO: use this.Content to load your game content here
             bg = new Background(this as Game);
             bg.Initialize();
+            fps = new FPSCounter(this as Game);
+            fps.Initialize();
+            planet = new HomePlanet(this as Game);
+            planet.Initialize();
+            planetHud = new PlanetStatusDisplay(this as Game, planet as HomePlanet);
+            planetHud.Initialize();
         }
 
         /// <summary>
@@ -62,6 +76,7 @@ namespace OrbitalDefense
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
+            Content.Unload();
         }
 
         /// <summary>
@@ -80,7 +95,10 @@ namespace OrbitalDefense
             // TODO: Add your update logic here
 
             bg.Update(gameTime);
+            planet.Update(gameTime);
 
+            planetHud.Update(gameTime);
+            fps.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -93,8 +111,11 @@ namespace OrbitalDefense
             GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
-            bg.Draw(gameTime);
+            //bg.Draw(gameTime);
+            //planet.Draw(gameTime);
 
+            planetHud.Draw(gameTime);
+            fps.Draw(gameTime);
             base.Draw(gameTime);
         }
     }
