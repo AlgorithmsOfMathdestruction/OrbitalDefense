@@ -96,7 +96,6 @@ namespace OrbitalDefense
             spriteBatch.Draw(ShieldBar, new Rectangle((int)ShieldBarPos.X+1, (int)ShieldBarPos.Y+1, (int)ShieldBarLength, 12), Color.LightBlue);
 
             spriteBatch.End();
-
         }
     }
 }

@@ -8,6 +8,8 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using OrbitalDefense.Projectiles;
+using OrbitalDefense.Turrets;
 
 namespace OrbitalDefense
 {
@@ -23,6 +25,11 @@ namespace OrbitalDefense
         DrawableGameComponent fps;
         DrawableGameComponent planet;
         DrawableGameComponent planetHud;
+        DrawableGameComponent planetBasis;
+
+        TurretDefaultBullet turret;
+
+        DrawableGameComponent shotHandler;
 
         public OrbitalDefenseMain()
         {
@@ -59,6 +66,9 @@ namespace OrbitalDefense
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             // TODO: use this.Content to load your game content here
+            shotHandler = new ProjectileHandler(this);
+            shotHandler.Initialize();
+
             bg = new Background(this as Game);
             bg.Initialize();
             fps = new FPSCounter(this as Game);
@@ -67,6 +77,11 @@ namespace OrbitalDefense
             planet.Initialize();
             planetHud = new PlanetStatusDisplay(this as Game, planet as HomePlanet);
             planetHud.Initialize();
+            planetBasis = new PlanetBasis(this as Game);
+            planetBasis.Initialize();
+
+            turret = new TurretDefaultBullet(this as Game, new Vector2(800, 600), shotHandler as ProjectileHandler);
+            turret.Initialize();
         }
 
         /// <summary>
@@ -91,11 +106,16 @@ namespace OrbitalDefense
                 this.Exit();
             if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.Escape))
                 this.Exit();
+            if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.Space))
+                turret.LanchTurret();
 
             // TODO: Add your update logic here
 
+            shotHandler.Update(gameTime);
             bg.Update(gameTime);
             planet.Update(gameTime);
+            planetBasis.Update(gameTime);
+            turret.Update(gameTime);
 
             planetHud.Update(gameTime);
             fps.Update(gameTime);
@@ -111,8 +131,11 @@ namespace OrbitalDefense
             GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
+            shotHandler.Draw(gameTime);
             bg.Draw(gameTime);
             planet.Draw(gameTime);
+            planetBasis.Draw(gameTime);
+            turret.Draw(gameTime);
 
             planetHud.Draw(gameTime);
             fps.Draw(gameTime);

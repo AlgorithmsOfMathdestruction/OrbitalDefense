@@ -39,9 +39,9 @@ namespace OrbitalDefense
 
             spriteBatch.Begin();
             spriteBatch.DrawString(_spr_font, string.Format("FPS={0:F1}", 1.0/gameTime.ElapsedGameTime.TotalSeconds),
-                new Vector2(Game.GraphicsDevice.DisplayMode.Width - 80.0f, Game.GraphicsDevice.DisplayMode.Height - 20.0f), Color.Yellow);
+                new Vector2(Game.Window.ClientBounds.Width - 80.0f, Game.Window.ClientBounds.Height - 20.0f), Color.Yellow);
             spriteBatch.DrawString(_spr_font, string.Format("Upd={0:F1}", updateRate),
-                new Vector2(Game.GraphicsDevice.DisplayMode.Width - 80.0f, Game.GraphicsDevice.DisplayMode.Height - 40.0f), Color.Yellow);
+                new Vector2(Game.Window.ClientBounds.Width - 80.0f, Game.Window.ClientBounds.Height - 40.0f), Color.Yellow);
             spriteBatch.End();
         }
     }

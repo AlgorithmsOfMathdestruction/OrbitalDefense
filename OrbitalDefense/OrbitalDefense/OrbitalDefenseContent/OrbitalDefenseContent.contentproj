@@ -62,6 +62,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="planetdamage.png">
+      <Name>planetdamage</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="planetshield.png">
       <Name>planetshield</Name>
       <Importer>TextureImporter</Importer>
@@ -69,8 +76,20 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="planetdamage.png">
-      <Name>planetdamage</Name>
+    <Compile Include="planetbase.png">
+      <Name>planetbase</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ammoDefaultBullet.png">
+      <Name>ammoDefaultBullet</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="turretDefaultBullet.png">
+      <Name>turretDefaultBullet</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
