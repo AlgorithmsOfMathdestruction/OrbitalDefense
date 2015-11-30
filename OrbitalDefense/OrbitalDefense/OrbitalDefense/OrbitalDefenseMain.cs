@@ -111,8 +111,8 @@ namespace OrbitalDefense
             GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
-            //bg.Draw(gameTime);
-            //planet.Draw(gameTime);
+            bg.Draw(gameTime);
+            planet.Draw(gameTime);
 
             planetHud.Draw(gameTime);
             fps.Draw(gameTime);

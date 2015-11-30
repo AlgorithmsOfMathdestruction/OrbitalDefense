@@ -63,11 +63,11 @@ namespace OrbitalDefense
 
             hitpoints = 1000.0f;
             hitpointsmax = 10000.0f;
-            regenrationPerMinute = 2000.0f;
+            regenrationPerMinute = 50000.0f;
             shield = 0.0f;
             shieldmax = 500.0f;
             shieldmin = -50.0f;
-            shieldRegenerationPerMinute = 500.0f;
+            shieldRegenerationPerMinute = 5000.0f;
         }
 
         /// <summary>

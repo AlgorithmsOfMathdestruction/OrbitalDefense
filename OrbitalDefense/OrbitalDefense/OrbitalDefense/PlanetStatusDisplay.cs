@@ -42,8 +42,8 @@ namespace OrbitalDefense
         public override void Initialize()
         {
             // TODO: Add your initialization code here
-            HealthBarMaxLength = 100f;
-            ShieldBarMaxLength = 100f;
+            HealthBarMaxLength = 150f;
+            ShieldBarMaxLength = 150f;
             HealthBarLength = 0f;
             ShieldBarLength = 0f;
 
@@ -54,12 +54,17 @@ namespace OrbitalDefense
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            HealthBar = new Texture2D(GraphicsDevice, (int)HealthBarLength+1, 10);
-            HealthBarBackground = new Texture2D(GraphicsDevice, (int)HealthBarMaxLength, 12);
-            HealthBarPos = new Vector2(1700, 5);
-            ShieldBar = new Texture2D(GraphicsDevice, (int)ShieldBarLength+1, 10);
-            ShieldBarBackground = new Texture2D(GraphicsDevice, (int)ShieldBarMaxLength, 12);
-            ShieldBarPos = new Vector2(1700, 18);
+            HealthBar = new Texture2D(GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
+            HealthBar.SetData(new[] { Color.Red });
+            HealthBarBackground = new Texture2D(GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
+            HealthBarBackground.SetData(new[] { Color.LightGray });
+            HealthBarPos = new Vector2(1760, 5);
+            ShieldBar = new Texture2D(GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
+            ShieldBar.SetData(new[] { Color.LightBlue });
+            ShieldBarBackground = new Texture2D(GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
+            ShieldBarBackground.SetData(new[] { Color.LightGray });
+            HealthBar.SetData(new[] { Color.Red });
+            ShieldBarPos = new Vector2(1760, 22);
 
         }
 
@@ -75,8 +80,6 @@ namespace OrbitalDefense
 
             HealthBarLength = HealthBarMaxLength * planet.HealthStatus;
             ShieldBarLength = ShieldBarMaxLength * planet.ShieldStatus;
-            HealthBar = new Texture2D(Game.GraphicsDevice, (int)HealthBarLength+1, 10);
-            ShieldBar = new Texture2D(Game.GraphicsDevice, (int)ShieldBarLength+1, 10);
         }
 
         public override void Draw(GameTime gameTime)
@@ -87,12 +90,10 @@ namespace OrbitalDefense
 
 
             //TODO Wieso taucht die Bar nicht auf ?
-            spriteBatch.Draw(HealthBarBackground, new Rectangle(0,0, HealthBarBackground.Width, HealthBarBackground.Height), null,
-                new Color(1.0f, 0.0f, 0.0f, 1.0f), 0, HealthBarPos, SpriteEffects.None, 0.5f);
-            //spriteBatch.Draw(HealthBarBackground, HealthBarPos, Color.Brown);
-            spriteBatch.Draw(ShieldBarBackground, ShieldBarPos, Color.Brown);
-            spriteBatch.Draw(HealthBar, HealthBarPos, Color.Red);
-            spriteBatch.Draw(ShieldBar, ShieldBarPos, Color.LightBlue);
+            spriteBatch.Draw(HealthBarBackground, new Rectangle((int)HealthBarPos.X, (int)HealthBarPos.Y, (int)HealthBarMaxLength+2, 14), Color.LightGray);
+            spriteBatch.Draw(ShieldBarBackground, new Rectangle((int)ShieldBarPos.X, (int)ShieldBarPos.Y, (int)ShieldBarMaxLength+2, 14), Color.LightGray);
+            spriteBatch.Draw(HealthBar, new Rectangle((int)HealthBarPos.X+1, (int)HealthBarPos.Y+1, (int)HealthBarLength, 12), Color.Red);
+            spriteBatch.Draw(ShieldBar, new Rectangle((int)ShieldBarPos.X+1, (int)ShieldBarPos.Y+1, (int)ShieldBarLength, 12), Color.LightBlue);
 
             spriteBatch.End();
 
