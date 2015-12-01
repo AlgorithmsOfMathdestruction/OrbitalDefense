@@ -19,7 +19,7 @@ namespace OrbitalDefense
     public class OrbitalDefenseMain : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        public SpriteBatch spriteBatch;
 
         DrawableGameComponent bg;
         DrawableGameComponent fps;

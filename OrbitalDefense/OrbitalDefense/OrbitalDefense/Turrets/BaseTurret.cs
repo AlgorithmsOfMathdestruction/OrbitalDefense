@@ -46,7 +46,7 @@ namespace OrbitalDefense.Turrets
         public float ammoAccelerationModifier;
         public float ammoLifetimeModifier;
 
-        public BaseTurret(Game game, Vector2 screenPosition, ProjectileHandler shotHandler)
+        public BaseTurret(Game game, Vector2 screenPosition, ref ProjectileHandler shotHandler)
             : base(game)
         {
             // TODO: Construct any child components here

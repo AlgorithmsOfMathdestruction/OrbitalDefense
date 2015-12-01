@@ -18,12 +18,13 @@ namespace OrbitalDefense.Projectiles
     /// </summary>
     public class MovingTurretShot : Microsoft.Xna.Framework.DrawableGameComponent
     {
-        private ProjectileHandler shotHandler;
-        public SpriteBatch spriteBatch;
+        //public SpriteBatch spriteBatch;
 
         public BaseAmmo ammo;
         public Vector2 moveDirection;
         public Vector2 position;
+        public Vector2 center;
+        public Rectangle targetRect;
 
         public float maxSpeed;
         public float currentSpeed;
@@ -36,7 +37,6 @@ namespace OrbitalDefense.Projectiles
         {
             // TODO: Construct any child components here
             ammo = emitter.CurrentAmmoType;
-            shotHandler = emitter.shotHandler;
 
             maxSpeed = ammo.baseSpeed * emitter.ammoSpeedModifier;
             acceleration = ammo.baseAcceleration * emitter.ammoAccelerationModifier;
@@ -44,6 +44,9 @@ namespace OrbitalDefense.Projectiles
             damage = ammo.baseDamage * emitter.ammoDamageModifier;
 
             position = emitter.EntrancePoint;
+            center = new Vector2(ammo.texture.Width / 2, ammo.texture.Height);
+            targetRect = new Rectangle((int)position.X, (int)position.Y, ammo.texture.Width, ammo.texture.Height);
+
             moveDirection = new Vector2(1.0f,0.0f); // ToDo: Mit drehung des turrets syncen
 
             currentSpeed = 0.0f;
@@ -60,12 +63,19 @@ namespace OrbitalDefense.Projectiles
 
             base.Initialize();
 
-            spriteBatch = new SpriteBatch(Game.GraphicsDevice);
+            //spriteBatch = new SpriteBatch(Game.GraphicsDevice);
         }
 
         protected override void LoadContent()
         {
             base.LoadContent();
+        }
+
+        protected override void UnloadContent()
+        {
+            base.UnloadContent();
+
+            //spriteBatch.Dispose();
         }
 
         /// <summary>
@@ -88,22 +98,22 @@ namespace OrbitalDefense.Projectiles
                     currentSpeed += (float)gameTime.ElapsedGameTime.TotalSeconds * acceleration;
 
                 position += moveDirection * currentSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            }
-            else
-            {
-                shotHandler.UnregisterShot(this);
+                targetRect.X = (int)position.X;
+                targetRect.Y = (int)position.Y;
             }
         }
 
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
+        }
 
-            spriteBatch.Begin();
+        public void Draw(GameTime gameTime, SpriteBatch batch)
+        {
+            base.Draw(gameTime);
 
-            spriteBatch.Draw(ammo.texture, new Rectangle((int)position.X, (int)position.Y, ammo.texture.Width, ammo.texture.Height), null, new Color(1f, 1f, 1f, 1f), 0f, new Vector2(ammo.texture.Width / 2, ammo.texture.Height), SpriteEffects.None, 0.01f);
-
-            spriteBatch.End();
+            batch.Draw(ammo.texture, targetRect, null,
+                Color.White, 0f, center, SpriteEffects.None, 0.01f);
         }
     }
 }
