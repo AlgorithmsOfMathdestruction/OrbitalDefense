@@ -1,2 +1,3 @@
 E:\XNAProjects\OrbitalDefense\OrbitalDefense\OrbitalDefenseContent\obj\x86\Debug\OrbitalDefenseContent.contentprojResolveAssemblyReference.cache
 H:\OrbitalDefense\OrbitalDefense\OrbitalDefense\OrbitalDefenseContent\obj\x86\Debug\OrbitalDefenseContent.contentprojResolveAssemblyReference.cache
+E:\XNAProjects\2d\OrbitalDefense\OrbitalDefense\OrbitalDefense\OrbitalDefenseContent\obj\x86\Debug\OrbitalDefenseContent.contentprojResolveAssemblyReference.cache

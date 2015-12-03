@@ -42,7 +42,12 @@ namespace OrbitalDefense.Turrets
             localEntrancePoint = new Vector2(0, turret.Width/2.0f);
         }
 
-        
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+
+            rotation += 6.0f * (float)gameTime.ElapsedGameTime.TotalSeconds;
+        }
 
     }
 }

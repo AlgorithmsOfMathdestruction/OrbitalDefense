@@ -37,6 +37,8 @@ namespace OrbitalDefense.Turrets
         public float fireRate_spm;
         public float accuracy_per;
 
+        private float cooldown; 
+
         public int ammoMax;
         public int ammoCount;
         public bool isAmmoUnlimited = false;
@@ -81,6 +83,9 @@ namespace OrbitalDefense.Turrets
             // TODO: Add your update code here
 
             base.Update(gameTime);
+
+            if (cooldown > 0.0)
+                cooldown -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
         }
 
         public override void Draw(GameTime gameTime)
@@ -97,7 +102,11 @@ namespace OrbitalDefense.Turrets
 
         public void LanchTurret()
         {
-            shotHandler.RegisterShot(new MovingTurretShot(Game, this));
+            if (cooldown <= 0.0f)
+            {
+                shotHandler.RegisterShot(new MovingTurretShot(Game, this));
+                cooldown = 60000.0f / fireRate_spm;
+            }
         }
     }
 }

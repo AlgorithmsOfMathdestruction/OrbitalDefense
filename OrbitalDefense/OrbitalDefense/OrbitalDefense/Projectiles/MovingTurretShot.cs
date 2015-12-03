@@ -47,7 +47,8 @@ namespace OrbitalDefense.Projectiles
             center = new Vector2(ammo.texture.Width / 2, ammo.texture.Height);
             targetRect = new Rectangle((int)position.X, (int)position.Y, ammo.texture.Width, ammo.texture.Height);
 
-            moveDirection = new Vector2(1.0f,0.0f); // ToDo: Mit drehung des turrets syncen
+            moveDirection = new Vector2((float)-Math.Sin(emitter.rotation), (float)-Math.Cos(emitter.rotation));
+            // ToDo: Mit drehung des turrets syncen
 
             currentSpeed = 0.0f;
 
@@ -97,9 +98,9 @@ namespace OrbitalDefense.Projectiles
                 else
                     currentSpeed += (float)gameTime.ElapsedGameTime.TotalSeconds * acceleration;
 
-                position += moveDirection * currentSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                targetRect.X = (int)position.X;
-                targetRect.Y = (int)position.Y;
+                position += moveDirection * currentSpeed * (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000.0f;
+                targetRect.X = (int)(position.X+0.5f);
+                targetRect.Y = (int)(position.Y+0.5f);
             }
         }
 
