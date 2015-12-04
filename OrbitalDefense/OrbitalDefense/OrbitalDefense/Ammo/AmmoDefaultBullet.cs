@@ -11,10 +11,10 @@ namespace OrbitalDefense.Ammo
     {
         public AmmoDefaultBullet(Game game) : base(game)
         {
-            baseSpeed = 250.0f;
+            baseSpeed = 400.0f;
             baseDamage = 10;
-            baseLifetime_ms = 5000;
-            baseAcceleration = 250.0f;
+            baseLifetime_ms = 4000;
+            baseAcceleration = 400.0f;
 
             ammoType = AmmoDamageType.Bullet;
         }

@@ -75,7 +75,7 @@ namespace OrbitalDefense.TurretGuns
         {
             base.Draw(gameTime);
 
-            spriteBatch.Draw(gun, screenPosition, null, Color.White, -rotation, new Vector2(gun.Width / 2.0f, gun.Height / 2.0f), 1.0f, SpriteEffects.None, 0.1f);
+            spriteBatch.Draw(gun, screenPosition, null, Color.White, -rotation, new Vector2(gun.Width / 2.0f, gun.Height / 2.0f), 0.5f, SpriteEffects.None, 0.1f);
 
             gun1.Draw(gameTime);
             gun2.Draw(gameTime);
