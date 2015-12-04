@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using OrbitalDefense.Projectiles;
 using OrbitalDefense.Turrets;
+using OrbitalDefense.TurretGuns;
 
 namespace OrbitalDefense
 {
@@ -27,9 +28,9 @@ namespace OrbitalDefense
         DrawableGameComponent planetHud;
         DrawableGameComponent planetBasis;
 
-        TurretDefaultBullet turret;
+        BaseTurretGun turret;
 
-        DrawableGameComponent shotHandler;
+        ProjectileHandlerGroup shotHandlerGroup;
 
         public OrbitalDefenseMain()
         {
@@ -66,8 +67,8 @@ namespace OrbitalDefense
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             // TODO: use this.Content to load your game content here
-            shotHandler = new ProjectileHandler(this);
-            shotHandler.Initialize();
+            shotHandlerGroup = new ProjectileHandlerGroup(this, spriteBatch);
+            shotHandlerGroup.Initialize();
 
             bg = new Background(this as Game);
             bg.Initialize();
@@ -80,7 +81,7 @@ namespace OrbitalDefense
             planetBasis = new PlanetBasis(this as Game);
             planetBasis.Initialize();
 
-            turret = new TurretDefaultBullet(this as Game, new Vector2(800, 600), shotHandler as ProjectileHandler);
+            turret = new BaseTurretGun(this as Game, spriteBatch, shotHandlerGroup);
             turret.Initialize();
         }
 
@@ -107,14 +108,35 @@ namespace OrbitalDefense
             if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.Escape))
                 this.Exit();
             if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.Space))
-                turret.LanchTurret();
+                if (turret != null)
+                {
+                    turret.gun1.LanchTurret();
+                    turret.gun2.LanchTurret();
+                }
+            if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.F1))
+            {
+                if (turret != null)
+                {
+                    turret.Dispose();
+                    turret = null;
+                }
+            }
+            if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.F2))
+            {
+                if (turret == null)
+                {
+                    turret = new BaseTurretGun(this as Game, spriteBatch, shotHandlerGroup);
+                    turret.Initialize();
+                }
+            }
 
             // TODO: Add your update logic here
 
-            shotHandler.Update(gameTime);
+            shotHandlerGroup.Update(gameTime);
             bg.Update(gameTime);
             planet.Update(gameTime);
             planetBasis.Update(gameTime);
+            if(turret != null)
             turret.Update(gameTime);
 
             planetHud.Update(gameTime);
@@ -130,15 +152,23 @@ namespace OrbitalDefense
         {
             GraphicsDevice.Clear(Color.Black);
 
-            // TODO: Add your drawing code here
-            shotHandler.Draw(gameTime);
             bg.Draw(gameTime);
-            planet.Draw(gameTime);
-            planetBasis.Draw(gameTime);
-            turret.Draw(gameTime);
 
-            planetHud.Draw(gameTime);
-            fps.Draw(gameTime);
+            spriteBatch.Begin();
+
+                // TODO: Add your drawing code here            
+                planet.Draw(gameTime);
+                planetBasis.Draw(gameTime);
+                if (turret != null)
+                    turret.Draw(gameTime);
+
+                shotHandlerGroup.Draw(gameTime);
+
+                planetHud.Draw(gameTime);
+                fps.Draw(gameTime);
+
+                spriteBatch.End();
+
             base.Draw(gameTime);
         }
     }

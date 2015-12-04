@@ -11,7 +11,7 @@ namespace OrbitalDefense.Turrets
 {
     class TurretDefaultBullet : BaseTurret
     {
-        public TurretDefaultBullet(Game game, Vector2 screenPosition, ProjectileHandler shotHandler) : base(game, screenPosition, ref shotHandler)
+        public TurretDefaultBullet(Game game, SpriteBatch batch, ProjectileHandler shotHandler) : base(game, batch, shotHandler)
         {
             rotation = 0.0f;
 
@@ -20,7 +20,7 @@ namespace OrbitalDefense.Turrets
             currentAmmoType.Initialize();
             
             turnSpeed = 0.1f;
-            fireRate_spm = 1000.0f;
+            fireRate_spm = 2000.0f;
             accuracy_per = 75.0f;
 
             ammoMax = 10000;
@@ -39,14 +39,19 @@ namespace OrbitalDefense.Turrets
 
             turret = Game.Content.Load<Texture2D>("turretDefaultBullet");
             // center top of texture
-            localEntrancePoint = new Vector2(0, turret.Width/2.0f);
+            localEntranceOrigin = new Vector2(0, -turret.Height / 2.0f);
         }
 
         public override void Update(GameTime gameTime)
         {
-            base.Update(gameTime);
+            //rotation += 1.0f * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            rotation += 6.0f * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            base.Update(gameTime);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
         }
 
     }

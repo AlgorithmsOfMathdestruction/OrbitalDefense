@@ -24,7 +24,7 @@ namespace OrbitalDefense.Projectiles
         public Vector2 moveDirection;
         public Vector2 position;
         public Vector2 center;
-        public Rectangle targetRect;
+        public float rotation;
 
         public float maxSpeed;
         public float currentSpeed;
@@ -45,9 +45,9 @@ namespace OrbitalDefense.Projectiles
 
             position = emitter.EntrancePoint;
             center = new Vector2(ammo.texture.Width / 2, ammo.texture.Height);
-            targetRect = new Rectangle((int)position.X, (int)position.Y, ammo.texture.Width, ammo.texture.Height);
 
-            moveDirection = new Vector2((float)-Math.Sin(emitter.rotation), (float)-Math.Cos(emitter.rotation));
+            rotation = emitter.rotation;
+            moveDirection = new Vector2((float)-Math.Sin(rotation), (float)-Math.Cos(rotation));
             // ToDo: Mit drehung des turrets syncen
 
             currentSpeed = 0.0f;
@@ -75,8 +75,6 @@ namespace OrbitalDefense.Projectiles
         protected override void UnloadContent()
         {
             base.UnloadContent();
-
-            //spriteBatch.Dispose();
         }
 
         /// <summary>
@@ -87,20 +85,23 @@ namespace OrbitalDefense.Projectiles
         {
             // TODO: Add your update code here
 
+            float time_ms = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+            float time_s = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
             base.Update(gameTime);
 
             if (lifetime_ms > 0.0f)
             {
-                lifetime_ms -= gameTime.ElapsedGameTime.Milliseconds;
+                lifetime_ms -= time_ms;
 
                 if (currentSpeed > maxSpeed)
                     currentSpeed = maxSpeed;
                 else
-                    currentSpeed += (float)gameTime.ElapsedGameTime.TotalSeconds * acceleration;
+                    currentSpeed += time_s * acceleration;
 
-                position += moveDirection * currentSpeed * (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000.0f;
-                targetRect.X = (int)(position.X+0.5f);
-                targetRect.Y = (int)(position.Y+0.5f);
+                position += moveDirection * currentSpeed * time_s;
+                if (position.X > Game.Window.ClientBounds.Width || position.X < 0 || position.Y > Game.Window.ClientBounds.Height || position.Y < 0)
+                    lifetime_ms = 0;
             }
         }
 
@@ -113,8 +114,7 @@ namespace OrbitalDefense.Projectiles
         {
             base.Draw(gameTime);
 
-            batch.Draw(ammo.texture, targetRect, null,
-                Color.White, 0f, center, SpriteEffects.None, 0.01f);
+            batch.Draw(ammo.texture, position, null, Color.White, -rotation, center, 1.0f, SpriteEffects.None, 0.1f);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace OrbitalDefense.Turrets
     {
         public Vector2 screenPosition;
 
-        protected static BaseAmmo currentAmmoType;
+        protected BaseAmmo currentAmmoType;
         public BaseAmmo CurrentAmmoType { get { return currentAmmoType; } }
 
         public SpriteBatch spriteBatch;
@@ -28,9 +28,10 @@ namespace OrbitalDefense.Turrets
         public ProjectileHandler shotHandler;
 
         public float rotation;
-        public Vector2 localEntrancePoint;
+        protected Vector2 localEntranceOrigin;
+        protected Vector2 localEntrancePoint;
 
-        public Vector2 EntrancePoint { get { return screenPosition; } } // ToDo: mit turret textur und rotation syncen
+        public Vector2 EntrancePoint { get { return screenPosition + localEntrancePoint; } } // ToDo: mit turret textur und rotation syncen
 
         public List<AmmoDamageType> supportedAmmoTypes = new List<AmmoDamageType>();
         public float turnSpeed;
@@ -48,11 +49,14 @@ namespace OrbitalDefense.Turrets
         public float ammoAccelerationModifier;
         public float ammoLifetimeModifier;
 
-        public BaseTurret(Game game, Vector2 screenPosition, ref ProjectileHandler shotHandler)
+        private Vector2 rotateBuffer = new Vector2(0,0); // sin = X , cos = Y
+
+        public BaseTurret(Game game, SpriteBatch batch, ProjectileHandler shotHandler)
             : base(game)
         {
             // TODO: Construct any child components here
-            this.screenPosition = screenPosition;
+            this.spriteBatch = batch;
+            //this.screenPosition = screenPosition;
             this.shotHandler = shotHandler;
         }
 
@@ -70,8 +74,6 @@ namespace OrbitalDefense.Turrets
         protected override void LoadContent()
         {
             base.LoadContent();
-
-            spriteBatch = new SpriteBatch(GraphicsDevice);
         }
 
         /// <summary>
@@ -86,27 +88,40 @@ namespace OrbitalDefense.Turrets
 
             if (cooldown > 0.0)
                 cooldown -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+
+            rotateBuffer.X = (float)Math.Sin(-rotation);
+            rotateBuffer.Y = (float)Math.Cos(rotation);
+            localEntrancePoint.X = rotateBuffer.Y * localEntranceOrigin.X - rotateBuffer.X * localEntranceOrigin.Y;
+            localEntrancePoint.Y = rotateBuffer.X * localEntranceOrigin.X + rotateBuffer.Y * localEntranceOrigin.Y;
         }
 
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
 
-            spriteBatch.Begin();
+            //spriteBatch.Draw(turret,new Rectangle((int)screenPosition.X,(int)screenPosition.Y, turret.Width, turret.Height), null,
+            //    new Color(1.0f, 1.0f, 1.0f, 1.0f), -rotation, new Vector2(turret.Width / 2.0f, turret.Height / 2.0f), SpriteEffects.None, 0.1f);
 
-            spriteBatch.Draw(turret, new Rectangle((int)screenPosition.X,(int)screenPosition.Y, turret.Width, turret.Height), null,
-                new Color(1.0f, 1.0f, 1.0f, 1.0f), 0.0f, new Vector2(turret.Width / 2.0f, turret.Height / 2.0f), SpriteEffects.None, 0.1f);
-
-            spriteBatch.End();
+            spriteBatch.Draw(turret, screenPosition, null, Color.White, -rotation, new Vector2(turret.Width / 2.0f, turret.Height / 2.0f), 1.0f, SpriteEffects.None, 0.1f);
         }
 
         public void LanchTurret()
         {
             if (cooldown <= 0.0f)
             {
-                shotHandler.RegisterShot(new MovingTurretShot(Game, this));
+                 shotHandler.RegisterShot(new MovingTurretShot(Game, this));
                 cooldown = 60000.0f / fireRate_spm;
             }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            //turret = null;
+            //shotHandler = null;
+            //currentAmmoType = null;
+            //supportedAmmoTypes = null;
         }
     }
 }

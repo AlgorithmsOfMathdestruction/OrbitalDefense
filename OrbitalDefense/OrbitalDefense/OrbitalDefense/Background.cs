@@ -85,7 +85,6 @@ namespace OrbitalDefense
         public override void Draw(GameTime gameTime)
         {
 
-
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive);
 
             spriteBatch.Draw(layer1, new Rectangle(0, 0, layer1.Width, layer1.Height),
