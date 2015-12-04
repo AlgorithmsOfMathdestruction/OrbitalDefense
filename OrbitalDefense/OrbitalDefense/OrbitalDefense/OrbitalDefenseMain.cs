@@ -28,8 +28,6 @@ namespace OrbitalDefense
         DrawableGameComponent planetHud;
         DrawableGameComponent planetBasis;
 
-        BaseTurretGun turret;
-
         ProjectileHandlerGroup shotHandlerGroup;
 
         public OrbitalDefenseMain()
@@ -78,11 +76,8 @@ namespace OrbitalDefense
             planet.Initialize();
             planetHud = new PlanetStatusDisplay(this as Game, planet as HomePlanet);
             planetHud.Initialize();
-            planetBasis = new PlanetBasis(this as Game);
+            planetBasis = new PlanetBasis(this as Game,spriteBatch,shotHandlerGroup);
             planetBasis.Initialize();
-
-            turret = new BaseTurretGun(this as Game, spriteBatch, shotHandlerGroup);
-            turret.Initialize();
         }
 
         /// <summary>
@@ -108,26 +103,12 @@ namespace OrbitalDefense
             if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.Escape))
                 this.Exit();
             if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.Space))
-                if (turret != null)
-                {
-                    turret.gun1.LanchTurret();
-                    turret.gun2.LanchTurret();
-                }
+                (planetBasis as PlanetBasis).FireGuns();
             if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.F1))
             {
-                if (turret != null)
-                {
-                    turret.Dispose();
-                    turret = null;
-                }
             }
             if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.F2))
             {
-                if (turret == null)
-                {
-                    turret = new BaseTurretGun(this as Game, spriteBatch, shotHandlerGroup);
-                    turret.Initialize();
-                }
             }
 
             // TODO: Add your update logic here
@@ -136,8 +117,6 @@ namespace OrbitalDefense
             bg.Update(gameTime);
             planet.Update(gameTime);
             planetBasis.Update(gameTime);
-            if(turret != null)
-            turret.Update(gameTime);
 
             planetHud.Update(gameTime);
             fps.Update(gameTime);
@@ -159,8 +138,6 @@ namespace OrbitalDefense
                 // TODO: Add your drawing code here            
                 planet.Draw(gameTime);
                 planetBasis.Draw(gameTime);
-                if (turret != null)
-                    turret.Draw(gameTime);
 
                 shotHandlerGroup.Draw(gameTime);
 

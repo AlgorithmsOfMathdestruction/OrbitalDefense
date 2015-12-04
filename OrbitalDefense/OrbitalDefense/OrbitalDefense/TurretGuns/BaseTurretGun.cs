@@ -26,7 +26,7 @@ namespace OrbitalDefense.TurretGuns
 
         private Vector2 rotateBuffer = new Vector2(0, 0); // sin = X , cos = Y
 
-        public BaseTurretGun(Game game, SpriteBatch batch, ProjectileHandlerGroup shotHandlerGroup) : base(game)
+        public BaseTurretGun(Game game, SpriteBatch batch, Vector2 screenPosition,ProjectileHandlerGroup shotHandlerGroup) : base(game)
         {
             this.spriteBatch = batch;
             this.shotHandlerGroup = shotHandlerGroup;
@@ -35,7 +35,7 @@ namespace OrbitalDefense.TurretGuns
             gun2 = new TurretDefaultBullet(Game, spriteBatch, shotHandlerGroup.GetNewHandler(this));
             gun2.Initialize();
             rotation = 0;
-            screenPosition = new Vector2(800, 600);
+            this.screenPosition = screenPosition;
             gun1Origin = new Vector2(7, 0);
             gun2Origin = new Vector2(-7, 0);
         }
@@ -95,6 +95,12 @@ namespace OrbitalDefense.TurretGuns
             //shotHandlerGroup = null;
             //gun1.Dispose();
             //gun1 = null;
+        }
+
+        public void FireGuns()
+        {
+            gun1.LanchTurret();
+            gun2.LanchTurret();
         }
     }
 }

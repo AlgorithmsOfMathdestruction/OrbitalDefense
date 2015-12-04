@@ -8,7 +8,8 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-
+using OrbitalDefense.TurretGuns;
+using OrbitalDefense.Projectiles;
 
 namespace OrbitalDefense
 {
@@ -17,13 +18,26 @@ namespace OrbitalDefense
     /// </summary>
     public class PlanetBasis : Microsoft.Xna.Framework.DrawableGameComponent
     {
+        Vector2 position;
+
         private SpriteBatch spriteBatch;
         private Texture2D planetBasis;
 
-        public PlanetBasis(Game game)
+        BaseTurretGun gun1;
+        BaseTurretGun gun2;
+        BaseTurretGun gun3;
+        BaseTurretGun gun4;
+
+        public PlanetBasis(Game game, SpriteBatch batch, ProjectileHandlerGroup projectileHandlerGroup)
             : base(game)
         {
             // TODO: Construct any child components here
+            spriteBatch = batch;
+            position = new Vector2( 960,540);
+            gun1 = new BaseTurretGun(Game, spriteBatch, position + new Vector2(0,-20), projectileHandlerGroup);
+            gun2 = new BaseTurretGun(Game, spriteBatch, position + new Vector2(-20, 0), projectileHandlerGroup);
+            gun3 = new BaseTurretGun(Game, spriteBatch, position + new Vector2(0, 20), projectileHandlerGroup);
+            gun4 = new BaseTurretGun(Game, spriteBatch, position + new Vector2(20, 0), projectileHandlerGroup);
         }
 
         /// <summary>
@@ -35,13 +49,16 @@ namespace OrbitalDefense
             // TODO: Add your initialization code here
 
             base.Initialize();
+
+            gun1.Initialize();
+            gun2.Initialize();
+            gun3.Initialize();
+            gun4.Initialize();
         }
 
         protected override void LoadContent()
         {
             base.LoadContent();
-
-            spriteBatch = new SpriteBatch(GraphicsDevice);
 
             planetBasis = Game.Content.Load<Texture2D>("planetbase");
         }
@@ -55,18 +72,33 @@ namespace OrbitalDefense
             // TODO: Add your update code here
 
             base.Update(gameTime);
+
+            gun1.Update(gameTime);
+            gun2.Update(gameTime);
+            gun3.Update(gameTime);
+            gun4.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
 
-            spriteBatch.Begin();
+            spriteBatch.Draw(planetBasis, position, null, Color.White,
+               0.0f, new Vector2(planetBasis.Width / 2.0f, planetBasis.Height / 2.0f), 1.0f,  SpriteEffects.None, 0.1f);
 
-            spriteBatch.Draw(planetBasis, new Rectangle(Game.Window.ClientBounds.Width / 2, Game.Window.ClientBounds.Height / 2, planetBasis.Width, planetBasis.Height), null,
-               new Color(1.0f, 1.0f, 1.0f, 1.0f), 0.0f, new Vector2(planetBasis.Width / 2.0f, planetBasis.Height / 2.0f), SpriteEffects.None, 0.1f);
+            gun1.Draw(gameTime);
+            gun2.Draw(gameTime);
+            gun3.Draw(gameTime);
+            gun4.Draw(gameTime);
 
-            spriteBatch.End();
+        }
+
+        public void FireGuns()
+        {
+            gun1.FireGuns();
+            gun2.FireGuns();
+            gun3.FireGuns();
+            gun4.FireGuns();
         }
     }
 }
