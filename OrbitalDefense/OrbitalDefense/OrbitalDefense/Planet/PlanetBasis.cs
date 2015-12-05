@@ -23,10 +23,10 @@ namespace OrbitalDefense
         private SpriteBatch spriteBatch;
         private Texture2D planetBasis;
 
-        BaseTurretGun gun1;
-        BaseTurretGun gun2;
-        BaseTurretGun gun3;
-        BaseTurretGun gun4;
+        TurretGunDefaultBullet gun1;
+        TurretGunDefaultBullet gun2;
+        TurretGunDefaultBullet gun3;
+        TurretGunDefaultBullet gun4;
 
         public PlanetBasis(Game game, SpriteBatch batch, ProjectileHandlerGroup projectileHandlerGroup)
             : base(game)
@@ -34,10 +34,10 @@ namespace OrbitalDefense
             // TODO: Construct any child components here
             spriteBatch = batch;
             position = new Vector2( 960,540);
-            gun1 = new BaseTurretGun(Game, spriteBatch, position + new Vector2(0,-20), projectileHandlerGroup);
-            gun2 = new BaseTurretGun(Game, spriteBatch, position + new Vector2(-20, 0), projectileHandlerGroup);
-            gun3 = new BaseTurretGun(Game, spriteBatch, position + new Vector2(0, 20), projectileHandlerGroup);
-            gun4 = new BaseTurretGun(Game, spriteBatch, position + new Vector2(20, 0), projectileHandlerGroup);
+            gun1 = new TurretGunDefaultBullet(Game, spriteBatch, position + new Vector2(0,-25), 0.7f, projectileHandlerGroup);
+            gun2 = new TurretGunDefaultBullet(Game, spriteBatch, position + new Vector2(-25, 0), 0.7f, projectileHandlerGroup);
+            gun3 = new TurretGunDefaultBullet(Game, spriteBatch, position + new Vector2(0, 25), 0.7f, projectileHandlerGroup);
+            gun4 = new TurretGunDefaultBullet(Game, spriteBatch, position + new Vector2(25, 0), 0.7f, projectileHandlerGroup);
         }
 
         /// <summary>
@@ -93,12 +93,20 @@ namespace OrbitalDefense
 
         }
 
-        public void FireGuns()
+        public void ActivateFire()
         {
-            gun1.FireGuns();
-            gun2.FireGuns();
-            gun3.FireGuns();
-            gun4.FireGuns();
+            gun1.ActivateFire();
+            gun2.ActivateFire();
+            gun3.ActivateFire();
+            gun4.ActivateFire();
+        }
+
+        public void DeactivateFire()
+        {
+            gun1.DeactivateFire();
+            gun2.DeactivateFire();
+            gun3.DeactivateFire();
+            gun4.DeactivateFire();
         }
     }
 }

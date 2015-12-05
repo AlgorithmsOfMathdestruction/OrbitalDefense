@@ -11,7 +11,7 @@ namespace OrbitalDefense.Turrets
 {
     class TurretDefaultBullet : BaseTurret
     {
-        public TurretDefaultBullet(Game game, SpriteBatch batch, ProjectileHandler shotHandler) : base(game, batch, shotHandler)
+        public TurretDefaultBullet(Game game, SpriteBatch batch, float scale, ProjectileHandler shotHandler) : base(game, batch, scale, shotHandler)
         {
             rotation = 0.0f;
 

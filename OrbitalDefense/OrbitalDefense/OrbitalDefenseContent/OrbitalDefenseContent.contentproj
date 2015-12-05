@@ -83,20 +83,34 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ammoDefaultBullet.png">
-      <Name>ammoDefaultBullet</Name>
+    <Compile Include="turretGunDefault.png">
+      <Name>turretGunDefault</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ammoDefaultBullet.png">
+      <Name>ammoDefaultBullet</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Compile Include="turretDefaultBullet.png">
       <Name>turretDefaultBullet</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="turretGunDefault.png">
-      <Name>turretGunDefault</Name>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="sound\turretBullet.wav">
+      <Name>turretBullet</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="enemy.png">
+      <Name>enemy</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

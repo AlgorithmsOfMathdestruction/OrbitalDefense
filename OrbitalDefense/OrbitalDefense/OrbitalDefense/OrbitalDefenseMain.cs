@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Media;
 using OrbitalDefense.Projectiles;
 using OrbitalDefense.Turrets;
 using OrbitalDefense.TurretGuns;
+using OrbitalDefense.Enemy;
 
 namespace OrbitalDefense
 {
@@ -27,6 +28,7 @@ namespace OrbitalDefense
         DrawableGameComponent planet;
         DrawableGameComponent planetHud;
         DrawableGameComponent planetBasis;
+        DrawableGameComponent enemy;
 
         ProjectileHandlerGroup shotHandlerGroup;
 
@@ -78,6 +80,8 @@ namespace OrbitalDefense
             planetHud.Initialize();
             planetBasis = new PlanetBasis(this as Game,spriteBatch,shotHandlerGroup);
             planetBasis.Initialize();
+            enemy = new BaseEnemy(this, spriteBatch, 1.0f, new Vector2(900, 800));
+            enemy.Initialize();
         }
 
         /// <summary>
@@ -103,7 +107,9 @@ namespace OrbitalDefense
             if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.Escape))
                 this.Exit();
             if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.Space))
-                (planetBasis as PlanetBasis).FireGuns();
+                (planetBasis as PlanetBasis).ActivateFire();
+            if (Keyboard.GetState(PlayerIndex.One).IsKeyUp(Keys.Space))
+                (planetBasis as PlanetBasis).DeactivateFire();
             if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.F1))
             {
             }
@@ -117,6 +123,7 @@ namespace OrbitalDefense
             bg.Update(gameTime);
             planet.Update(gameTime);
             planetBasis.Update(gameTime);
+            enemy.Update(gameTime);
 
             planetHud.Update(gameTime);
             fps.Update(gameTime);
@@ -138,6 +145,7 @@ namespace OrbitalDefense
                 // TODO: Add your drawing code here            
                 planet.Draw(gameTime);
                 planetBasis.Draw(gameTime);
+            enemy.Draw(gameTime);
 
                 shotHandlerGroup.Draw(gameTime);
 

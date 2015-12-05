@@ -9,7 +9,7 @@ using System.Text;
 
 namespace OrbitalDefense.TurretGuns
 {
-    public class BaseTurretGun : Microsoft.Xna.Framework.DrawableGameComponent
+    public abstract class BaseTurretGun : Microsoft.Xna.Framework.DrawableGameComponent
     {
         public Vector2 screenPosition;
 
@@ -18,26 +18,20 @@ namespace OrbitalDefense.TurretGuns
         public ProjectileHandlerGroup shotHandlerGroup;
 
         public float rotation;
+        public float scale;
 
-        public Vector2 gun1Origin, gun2Origin;
-
-        public BaseTurret gun1;
-        public BaseTurret gun2;
+        public List<BaseTurret> turrets = new List<BaseTurret>();
+        public List<Vector2> turretOrigins = new List<Vector2>(); 
 
         private Vector2 rotateBuffer = new Vector2(0, 0); // sin = X , cos = Y
 
-        public BaseTurretGun(Game game, SpriteBatch batch, Vector2 screenPosition,ProjectileHandlerGroup shotHandlerGroup) : base(game)
+        public BaseTurretGun(Game game, SpriteBatch batch, Vector2 screenPosition, float scale, ProjectileHandlerGroup shotHandlerGroup) : base(game)
         {
             this.spriteBatch = batch;
             this.shotHandlerGroup = shotHandlerGroup;
-            gun1 = new TurretDefaultBullet(Game, spriteBatch, shotHandlerGroup.GetNewHandler(this));
-            gun1.Initialize();
-            gun2 = new TurretDefaultBullet(Game, spriteBatch, shotHandlerGroup.GetNewHandler(this));
-            gun2.Initialize();
+            this.scale = scale;
             rotation = 0;
             this.screenPosition = screenPosition;
-            gun1Origin = new Vector2(7, 0);
-            gun2Origin = new Vector2(-7, 0);
         }
 
         public override void Initialize()
@@ -48,8 +42,6 @@ namespace OrbitalDefense.TurretGuns
         protected override void LoadContent()
         {
             base.LoadContent();
-       
-            gun = Game.Content.Load<Texture2D>("turretGunDefault");
         }
 
         public override void Update(GameTime gameTime)
@@ -62,26 +54,26 @@ namespace OrbitalDefense.TurretGuns
             rotateBuffer.X = (float)Math.Sin(-rotation);
             rotateBuffer.Y = (float)Math.Cos(rotation);
 
-            gun1.rotation += roatationMove;
-            gun1.screenPosition = screenPosition + new Vector2(gun1Origin.X * rotateBuffer.Y - gun1Origin.Y * rotateBuffer.X, gun1Origin.X * rotateBuffer.X + gun1Origin.Y * rotateBuffer.Y);
-            gun2.rotation += roatationMove;
-            gun2.screenPosition = screenPosition + new Vector2(gun2Origin.X * rotateBuffer.Y - gun2Origin.Y * rotateBuffer.X, gun2Origin.X * rotateBuffer.X + gun2Origin.Y * rotateBuffer.Y);
+            for (int i = 0; i < turrets.Count; ++i)
+            {
+                turrets[i].rotation += roatationMove;
+                turrets[i].screenPosition = screenPosition + new Vector2(turretOrigins[i].X * rotateBuffer.Y - turretOrigins[i].Y * rotateBuffer.X, turretOrigins[i].X * rotateBuffer.X + turretOrigins[i].Y * rotateBuffer.Y);
 
-            gun1.Update(gameTime);
-            gun2.Update(gameTime);
+                turrets[i].Update(gameTime);
+            }
         }
 
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
 
-            spriteBatch.Draw(gun, screenPosition, null, Color.White, -rotation, new Vector2(gun.Width / 2.0f, gun.Height / 2.0f), 0.5f, SpriteEffects.None, 0.1f);
+            spriteBatch.Draw(gun, screenPosition, null, Color.White, -rotation, new Vector2(gun.Width / 2.0f, gun.Height / 2.0f), scale, SpriteEffects.None, 0.1f);
 
-            gun1.Draw(gameTime);
-            gun2.Draw(gameTime);
+            foreach (BaseTurret t in turrets)
+                t.Draw(gameTime);
         }
 
-        void Destroy()
+        protected void Destroy()
         {
             shotHandlerGroup.RequestDestroyHandler(this);
         }
@@ -91,16 +83,18 @@ namespace OrbitalDefense.TurretGuns
             base.Dispose(disposing);
 
             Destroy();
-            //turret = null;
-            //shotHandlerGroup = null;
-            //gun1.Dispose();
-            //gun1 = null;
         }
 
-        public void FireGuns()
+        public void ActivateFire()
         {
-            gun1.LanchTurret();
-            gun2.LanchTurret();
+            foreach (BaseTurret t in turrets)
+                t.activateFire();
+        }
+
+        public void DeactivateFire()
+        {
+            foreach (BaseTurret t in turrets)
+                t.deactivateFire();
         }
     }
 }
