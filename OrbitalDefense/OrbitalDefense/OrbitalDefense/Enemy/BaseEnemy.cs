@@ -26,7 +26,7 @@ namespace OrbitalDefense.Enemy
         float radius;
 
         SpriteBatch spriteBatch;
-        Texture2D shipTexture;
+        Texture2D shipTexture, SimpleTexture;
 
         float speed;
         float maxSpeed;
@@ -77,6 +77,8 @@ namespace OrbitalDefense.Enemy
             shipTexture = Game.Content.Load<Texture2D>("enemy");
             center = new Vector2(shipTexture.Width / 2, shipTexture.Height /2);
             radius = shipTexture.Width;
+
+            SimpleTexture = new Texture2D(GraphicsDevice, 10, 10, false, SurfaceFormat.Color);
         }
 
         /// <summary>
@@ -113,10 +115,14 @@ namespace OrbitalDefense.Enemy
             targetDirection = flightTarget - screenPosition;
             targetDirection.Normalize();
 
-            if (targetDirection.X < 0.0f)
-                targetRotation = (float)Math.Acos(-targetDirection.Y) / targetDirection.Length();
-            else
-                targetRotation = 2f * (float)Math.PI - (float)Math.Acos(-targetDirection.Y) / targetDirection.Length();
+            //if (targetDirection.X < 0.0f)
+            //    targetRotation = (float)Math.Acos(-targetDirection.Y) / targetDirection.Length();
+            //else
+            //    targetRotation = 2f * (float)Math.PI - (float)Math.Acos(-targetDirection.Y) / targetDirection.Length();
+
+            //targetRotation = (float)Math.Atan2(targetDirection.Y, targetDirection.X);
+
+            targetRotation = getRotation(0, -1, targetDirection.X, targetDirection.Y);
 
             targetRotation = Mod360(targetRotation);
 
@@ -134,10 +140,22 @@ namespace OrbitalDefense.Enemy
             rotation = Mod360(rotation);
 
             moveDirection.X = (float)-Math.Sin(rotation);
-            moveDirection.Y = (float)-Math.Cos(rotation);
+            moveDirection.Y = (float)Math.Cos(rotation);
             moveDirection.Normalize();      
 
             screenPosition += moveDirection * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+        }
+
+        private float getRotation(float x, float y, float x2, float y2)
+        {
+            float adj = x - x2;
+            float opp = y - y2;
+            float tan = opp / adj;
+            float res = MathHelper.ToDegrees((float)Math.Atan2(opp, adj));
+            res = (res - 180) % 360;
+            if (res < 0) { res += 360; }
+            res = MathHelper.ToRadians(res);
+            return res;
         }
 
         public override void Draw(GameTime gameTime)
@@ -145,7 +163,6 @@ namespace OrbitalDefense.Enemy
             base.Draw(gameTime);
 
             spriteBatch.Draw(shipTexture, screenPosition, null, Color.White, -rotation, new Vector2(shipTexture.Width / 2.0f, shipTexture.Height / 2.0f), scale, SpriteEffects.None, 0.1f);
-
         }
 
         private float TargetDist()
